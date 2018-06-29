@@ -5,8 +5,8 @@ import java.util.NoSuchElementException;
 
 public abstract class Sort {
     public ArrayList<Integer> array;
-    private LinkedList<Pair> steps = new LinkedList<Pair>();
-    private ListIterator<Pair> current = steps.listIterator();
+    protected LinkedList<Pair> steps = new LinkedList<Pair>();
+    protected ListIterator<Pair> current = null;
 
     public Sort(ArrayList<Integer> array) {
         this.array = new ArrayList<Integer>(array);
@@ -21,7 +21,8 @@ public abstract class Sort {
 
     Pair nextStep() {
         try {
-            return current.next();
+            Pair pair = current.next();
+            return new Pair(pair);
         } catch (NoSuchElementException exp) {
             return null;
         }
@@ -30,7 +31,7 @@ public abstract class Sort {
 
     Pair prevStep() {
         try {
-            return current.previous();
+            return new Pair(current.previous());
         } catch (NoSuchElementException exp) {
             return null;
         }

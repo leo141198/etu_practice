@@ -9,6 +9,7 @@ public class QuickSort extends Sort {
     @Override
     public void sort() {
         sortArray(0, array.size() - 1);
+        current = steps.listIterator();
     }
 
     private void sortArray(int from, int to) {
