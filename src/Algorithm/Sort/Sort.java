@@ -1,4 +1,6 @@
-package Algorithm;
+package Algorithm.Sort;
+
+import Algorithm.Structure.Pair;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

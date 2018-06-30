@@ -1,8 +1,8 @@
 package Graphics;
 
-import Algorithm.Pair;
-import Algorithm.QuickSort;
-import Algorithm.Sort;
+import Algorithm.Structure.Pair;
+import Algorithm.Sort.Sort;
+import Algorithm.Sort.QuickSort;
 
 import javax.swing.*;
 import java.awt.*;
