@@ -18,7 +18,7 @@ public abstract class Sort {
         int temp = array.get(i);
         array.set(i, array.get(j));
         array.set(j, temp);
-        steps.push(Pair.of(i, j));
+        steps.add(Pair.of(j, i));
     }
 
     public Pair nextStep() {
