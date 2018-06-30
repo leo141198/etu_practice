@@ -1,3 +1,5 @@
+package Algorithm;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.ListIterator;
@@ -19,7 +21,7 @@ public abstract class Sort {
         steps.push(Pair.of(i, j));
     }
 
-    Pair nextStep() {
+    public Pair nextStep() {
         try {
             Pair pair = current.next();
             return new Pair(pair);
@@ -29,7 +31,7 @@ public abstract class Sort {
 
     }
 
-    Pair prevStep() {
+    public Pair prevStep() {
         try {
             return new Pair(current.previous());
         } catch (NoSuchElementException exp) {
@@ -37,5 +39,5 @@ public abstract class Sort {
         }
     }
 
-    abstract void sort();
+    public abstract void sort();
 }

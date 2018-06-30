@@ -1,3 +1,5 @@
+package Algorithm;
+
 public class Pair {
     private Integer first;
     private Integer second;
