@@ -1,6 +1,6 @@
 package Graphics;
 
-import Algorithm.Structure.Pair;
+import Algorithm.Structure.SortStep;
 import Algorithm.Sort.Sort;
 import Algorithm.Sort.QuickSort;
 
@@ -12,26 +12,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-public class Map extends JPanel {
+public class Map extends JPanel implements ActionListener {
     private ArrayList<SortElem> elems = new ArrayList<SortElem>();
     private Integer max_value;
     private Sort sort;
-    private Timer timer;
-    private Integer delay;
+    protected Timer timer;
+    protected Boolean auto_direction = true;
+    protected Integer delay;
+    protected Boolean rgb;
+    protected SortStep current_step;
 
     public Map() {
         ArrayList<Integer> list = new ArrayList<Integer>();
         Random random = new Random();
-        for (int i = 0; i < 100; i++) {
-            list.add(random.nextInt(1000));
+        for (int i = 0; i < 10; i++) {
+            list.add(random.nextInt(50));
         }
-        init(list, true);
-        timer = new Timer(30, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                nextStep();
-            }
-        });
+        init(list, false);
+        timer = new Timer(100, this);
     }
 
     @Override
@@ -54,16 +52,50 @@ public class Map extends JPanel {
         }
         this.sort = new QuickSort(array);
         sort.sort();
+        this.rgb = rgb;
         if (rgb) {
-            setRGBcolors();
+            setRGBColors();
+        } else {
+            setDemoColors();
         }
         repaint();
     }
 
-    private void nextStep() {
-        Pair pair;
-        if ((pair = sort.nextStep()) != null) {
-            swapElems(pair.getFirst(), pair.getSecond());
+    protected void setRGB(boolean rgb) {
+        this.rgb = rgb;
+        if (rgb) {
+            setRGBColors();
+        } else {
+            setDemoColors();
+        }
+        repaint();
+    }
+
+    protected void nextStep() {
+        makeStep(true);
+    }
+
+    protected void prevStep() {
+        makeStep(false);
+    }
+
+    private void makeStep(boolean next) {
+        if (!this.rgb && current_step != null) {
+            unselectStep(current_step);
+        }
+        if (next) {
+            current_step = sort.nextStep();
+        } else {
+            current_step = sort.prevStep();
+        }
+        if (current_step != null) {
+            if (!this.rgb) {
+                selectStep(current_step);
+            }
+            if (current_step.getSwap()) {
+                swapElems(current_step.getFirst(), current_step.getSecond());
+            }
+            repaint();
         } else {
             timer.stop();
         }
@@ -71,10 +103,17 @@ public class Map extends JPanel {
 
     private void swapElems(int i, int j) {
         Collections.swap(elems, i, j);
-        repaint();
     }
 
-    private void setRGBcolors() {
+    public void actionPerformed(ActionEvent e) {
+        if (auto_direction) {
+            nextStep();
+        } else {
+            prevStep();
+        }
+    }
+
+    private void setRGBColors() {
         for (int i = 0; i < sort.array.size(); i++) {
             for (SortElem elem : elems) {
                 if (sort.array.get(i).equals(elem.getValue())) {
@@ -88,13 +127,40 @@ public class Map extends JPanel {
                         elem.setColor(new Color(0, 255 - (255 / (sort.array.size() / 6) * (i % (sort.array.size() / 6))), 255));
                     } else if (i < sort.array.size() / 6 * 5) {
                         elem.setColor(new Color((255 / (sort.array.size() / 6) * (i % (sort.array.size() / 6))), 0, 255));
-                    } else if(i < sort.array.size() - 2) {
+                    } else if (i < sort.array.size() - 6) {
                         elem.setColor(new Color(255, 0, 255 - (255 / (sort.array.size() / 6) * (i % (sort.array.size() / 6)))));
                     } else {
-                        elem.setColor(new Color(255,0,0));
+                        elem.setColor(new Color(255, 0, 0));
                     }
                 }
             }
         }
+    }
+
+    private void setDemoColors() {
+        for (SortElem elem : elems) {
+            elem.setColor(new Color(190, 190, 190));
+        }
+    }
+
+    private void selectStep(SortStep step) {
+        elems.get(step.getPivot()).setColor(Color.yellow);
+        if (step.getFirstChange()) {
+            elems.get(step.getFirst()).setColor(Color.blue);
+        } else {
+            elems.get(step.getFirst()).setColor(Color.orange);
+        }
+
+        if (step.getSecondChange()) {
+            elems.get(step.getSecond()).setColor(Color.blue);
+        } else {
+            elems.get(step.getSecond()).setColor(Color.orange);
+        }
+    }
+
+    private void unselectStep(SortStep step) {
+        elems.get(step.getFirst()).setColor(new Color(190, 190, 190));
+        elems.get(step.getSecond()).setColor(new Color(190, 190, 190));
+        elems.get(step.getPivot()).setColor(new Color(190, 190, 190));
     }
 }
