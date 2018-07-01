@@ -10,28 +10,35 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
 
 public class Map extends JPanel implements ActionListener {
     private ArrayList<SortElem> elems = new ArrayList<SortElem>();
     private Integer max_value;
     private Sort sort;
-    protected Timer timer;
-    protected Boolean auto_direction = true;
-    protected Integer delay;
-    protected Boolean rgb;
-    protected SortStep current_step;
+    private Boolean rgb = false;
+    private Timer timer;
+    private Boolean auto_direction = true;
+    private SortStep current_step;
 
-    public Map() {
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        Random random = new Random();
-        for (int i = 0; i < 10; i++) {
-            list.add(random.nextInt(50));
+    public Map(ArrayList<Integer> array) {
+        this.max_value = Collections.max(array);
+        for (Integer num : array) {
+            this.elems.add(new SortElem(num, 0, 0, 0, 0));
         }
-        init(list, false);
+
+        this.sort = new QuickSort(array);
+        sort.sort();
+
+        setDemoColors();
+        repaint();
         timer = new Timer(100, this);
     }
 
+    /**
+     * Отрисовка компоненты
+     *
+     * @param g графика родительского объекта
+     */
     @Override
     public void paint(Graphics g) {
         super.paintComponent(g);
@@ -45,22 +52,11 @@ public class Map extends JPanel implements ActionListener {
         }
     }
 
-    public void init(ArrayList<Integer> array, boolean rgb) {
-        this.max_value = Collections.max(array);
-        for (Integer num : array) {
-            this.elems.add(new SortElem(num, 0, 0, 0, 0));
-        }
-        this.sort = new QuickSort(array);
-        sort.sort();
-        this.rgb = rgb;
-        if (rgb) {
-            setRGBColors();
-        } else {
-            setDemoColors();
-        }
-        repaint();
-    }
-
+    /**
+     * Установка цветого паттерна элементов
+     *
+     * @param rgb RGB / demo
+     */
     protected void setRGB(boolean rgb) {
         this.rgb = rgb;
         if (rgb) {
@@ -71,14 +67,77 @@ public class Map extends JPanel implements ActionListener {
         repaint();
     }
 
+
+
+    /* УПРАВЛЕНИЕ ТАЙМЕРОМ  */
+
+    /**
+     * Установк задежрки таймера
+     *
+     * @param delay задержка
+     */
+    protected void setTimerDelay(int delay) {
+        timer.setDelay(delay);
+    }
+
+    /**
+     * Запуск таймера
+     */
+    protected void timerStart() {
+        timer.start();
+    }
+
+    /**
+     * Установка таймера
+     */
+    protected void timerStop() {
+        timer.stop();
+    }
+
+
+    /* УПРАВЛЕНИЕ ШАГАМИ */
+
+    /**
+     * Установка направление отображения шагов
+     *
+     * @param direction направление
+     */
+    protected void setAutoDirection(boolean direction) {
+        this.auto_direction = direction;
+    }
+
+    /**
+     * Функция, триггеруемая таймером
+     *
+     * @param e событие
+     */
+    public void actionPerformed(ActionEvent e) {
+        if (auto_direction) {
+            nextStep();
+        } else {
+            prevStep();
+        }
+    }
+
+    /**
+     * Отобразить следующий шаг алгоритма
+     */
     protected void nextStep() {
         makeStep(true);
     }
 
+    /**
+     * Отобразить предыдущий шаг алгоритма
+     */
     protected void prevStep() {
         makeStep(false);
     }
 
+    /**
+     * Отобразить шаг алгоритма
+     *
+     * @param next направление (вперед / назад)
+     */
     private void makeStep(boolean next) {
         if (!this.rgb && current_step != null) {
             unselectStep(current_step);
@@ -101,18 +160,55 @@ public class Map extends JPanel implements ActionListener {
         }
     }
 
+    /**
+     * Поменять элементы местами
+     *
+     * @param i индекс первого элемента
+     * @param j индекс второго элемента
+     */
     private void swapElems(int i, int j) {
         Collections.swap(elems, i, j);
     }
 
-    public void actionPerformed(ActionEvent e) {
-        if (auto_direction) {
-            nextStep();
+
+    /* ОТРИСОВКА ШАГОВ */
+
+    /**
+     * Выбор элементов, отвечающих за текущий шаг алгоритма
+     *
+     * @param step шаг алгоритма
+     */
+    private void selectStep(SortStep step) {
+        elems.get(step.getPivot()).setColor(Color.yellow);
+        if (step.getFirstChange()) {
+            elems.get(step.getFirst()).setColor(Color.blue);
         } else {
-            prevStep();
+            elems.get(step.getFirst()).setColor(Color.orange);
+        }
+
+        if (step.getSecondChange()) {
+            elems.get(step.getSecond()).setColor(Color.blue);
+        } else {
+            elems.get(step.getSecond()).setColor(Color.orange);
         }
     }
 
+    /**
+     * Отмена выбора элементов, отвечающих за шаг алгоритма (нужно для перехода к следующему шагу)
+     *
+     * @param step шаг алгоритма
+     */
+    private void unselectStep(SortStep step) {
+        elems.get(step.getFirst()).setColor(new Color(190, 190, 190));
+        elems.get(step.getSecond()).setColor(new Color(190, 190, 190));
+        elems.get(step.getPivot()).setColor(new Color(190, 190, 190));
+    }
+
+    /* ОТРИСОВКА ЦВЕТОВ */
+
+    /**
+     * Установка цветов элементов в диапазон RGB (в результате сортировки получится паттерн RGB)
+     */
     private void setRGBColors() {
         for (int i = 0; i < sort.array.size(); i++) {
             for (SortElem elem : elems) {
@@ -137,30 +233,12 @@ public class Map extends JPanel implements ActionListener {
         }
     }
 
+    /**
+     * Установка цветов элементов в учебный режим для отображения перемещений
+     */
     private void setDemoColors() {
         for (SortElem elem : elems) {
             elem.setColor(new Color(190, 190, 190));
         }
-    }
-
-    private void selectStep(SortStep step) {
-        elems.get(step.getPivot()).setColor(Color.yellow);
-        if (step.getFirstChange()) {
-            elems.get(step.getFirst()).setColor(Color.blue);
-        } else {
-            elems.get(step.getFirst()).setColor(Color.orange);
-        }
-
-        if (step.getSecondChange()) {
-            elems.get(step.getSecond()).setColor(Color.blue);
-        } else {
-            elems.get(step.getSecond()).setColor(Color.orange);
-        }
-    }
-
-    private void unselectStep(SortStep step) {
-        elems.get(step.getFirst()).setColor(new Color(190, 190, 190));
-        elems.get(step.getSecond()).setColor(new Color(190, 190, 190));
-        elems.get(step.getPivot()).setColor(new Color(190, 190, 190));
     }
 }
