@@ -13,7 +13,6 @@ public class SortElem extends Component {
 
     public SortElem(Integer value, float x, float y, float width, float height) {
         this.value = value;
-        this.color = new Color(190, 190, 190);
         setRectangle(x, y, width, height);
     }
 
