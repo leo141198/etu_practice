@@ -25,6 +25,12 @@ public class Map extends JPanel implements ActionListener {
         init(array, sort);
     }
 
+    /**
+     * Инициализаци отображения (констуктор не подходит, т.к. есть необходимость переинициализации
+     *
+     * @param array массив чисел
+     * @param sort  объект сортировщика
+     */
     protected void init(ArrayList<Integer> array, Sort sort) {
         if (timer != null) {
             timer.stop();
@@ -61,21 +67,6 @@ public class Map extends JPanel implements ActionListener {
             elems.get(i).setRectangle(i * elem_width, (float) getHeight(), elem_width, elem_height);
             elems.get(i).paint(g);
         }
-    }
-
-    /**
-     * Установка цветого паттерна элементов
-     *
-     * @param rgb RGB / demo
-     */
-    protected void setRGB(boolean rgb) {
-        this.rgb = rgb;
-        if (rgb) {
-            setRGBColors();
-        } else {
-            setDemoColors();
-        }
-        repaint();
     }
 
 
@@ -237,6 +228,21 @@ public class Map extends JPanel implements ActionListener {
     }
 
     /* ОТРИСОВКА ЦВЕТОВ */
+
+    /**
+     * Установка цветого паттерна элементов
+     *
+     * @param rgb RGB / demo
+     */
+    protected void setRGB(boolean rgb) {
+        this.rgb = rgb;
+        if (rgb) {
+            setRGBColors();
+        } else {
+            setDemoColors();
+        }
+        repaint();
+    }
 
     /**
      * Установка цветов элементов в диапазон RGB (в результате сортировки получится паттерн RGB)

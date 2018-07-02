@@ -1,7 +1,5 @@
 package Algorithm.Structure;
 
-import Algorithm.Sort.Sort;
-
 public class SortStep {
     private Integer first = null;
     private Integer second = null;

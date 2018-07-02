@@ -56,6 +56,9 @@ public class Menu extends JMenuBar implements ActionListener {
         this.add(dataMenu);
     }
 
+    /**
+     * Инициализация меню управления выбора алгоритма
+     */
     private void initAlgorithmMenu() {
         algorithmMenu = new JMenu("Алгоритм");
 
@@ -101,6 +104,10 @@ public class Menu extends JMenuBar implements ActionListener {
         this.add(displayMenu);
     }
 
+    /**
+     * Обработка событий меню
+     * @param e событие
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == colorRGB) {
@@ -142,6 +149,10 @@ public class Menu extends JMenuBar implements ActionListener {
         }
     }
 
+    /**
+     * Обработка событий меню выбора типа отображения
+     * @param rgb вид отображения
+     */
     private void setRGB(boolean rgb) {
         Form parent = (Form) SwingUtilities.getWindowAncestor(this);
         if (rgb) {
@@ -155,6 +166,10 @@ public class Menu extends JMenuBar implements ActionListener {
         }
     }
 
+    /**
+     * Обработка меню выбора алгоритма
+     * @param algo вид алгоритма
+     */
     private void setAlgo(int algo) {
         Form parent = (Form) SwingUtilities.getWindowAncestor(this);
         switch (algo) {
@@ -176,6 +191,10 @@ public class Menu extends JMenuBar implements ActionListener {
         }
     }
 
+    /**
+     * Обработка меню выбора источника данных
+     * @param data источник данных
+     */
     private void setData(int data) {
         Form parent = (Form) SwingUtilities.getWindowAncestor(this);
         switch (data) {

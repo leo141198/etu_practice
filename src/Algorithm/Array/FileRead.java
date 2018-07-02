@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class FileRead {
+    /**
+     * Чтение массива чисел из файла
+     * @return массив считанных элементов
+     */
     public static ArrayList<Integer> readFile() {
         JFileChooser jfc = new JFileChooser();
         jfc.showOpenDialog(null);
