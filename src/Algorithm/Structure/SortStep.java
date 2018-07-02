@@ -7,14 +7,16 @@ public class SortStep {
     private boolean first_change;
     private boolean second_change;
     private boolean swap;
+    private boolean final_pos;
 
-    public SortStep(Integer first, Integer second,  Integer pivot, boolean first_change, boolean second_change, boolean swap) {
+    public SortStep(Integer first, Integer second, Integer pivot, boolean first_change, boolean second_change, boolean swap, boolean final_pos) {
         this.first = first;
         this.second = second;
         this.first_change = first_change;
         this.second_change = second_change;
         this.pivot = pivot;
         this.swap = swap;
+        this.final_pos = final_pos;
     }
 
     public SortStep(SortStep other) {
@@ -24,6 +26,7 @@ public class SortStep {
         this.second_change = other.second_change;
         this.pivot = other.pivot;
         this.swap = other.swap;
+        this.final_pos = other.final_pos;
     }
 
     public Integer getFirst() {
@@ -48,5 +51,9 @@ public class SortStep {
 
     public Boolean getSwap() {
         return swap;
+    }
+
+    public Boolean getFinalPos() {
+        return final_pos;
     }
 }
