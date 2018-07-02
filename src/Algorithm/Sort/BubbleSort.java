@@ -4,8 +4,8 @@ import Algorithm.Structure.SortStep;
 
 import java.util.ArrayList;
 
-public class BubleSort extends Sort {
-    public BubleSort(ArrayList<Integer> array) {
+public class BubbleSort extends Sort {
+    public BubbleSort(ArrayList<Integer> array) {
         super(array);
     }
 

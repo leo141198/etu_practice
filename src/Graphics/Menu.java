@@ -2,7 +2,7 @@ package Graphics;
 
 import Algorithm.Array.FileRead;
 import Algorithm.Array.Generator;
-import Algorithm.Sort.BubleSort;
+import Algorithm.Sort.BubbleSort;
 import Algorithm.Sort.QuickSortHoara;
 import Algorithm.Sort.QuickSortLomuto;
 
@@ -27,7 +27,7 @@ public class Menu extends JMenuBar implements ActionListener {
     private JMenu selectAlgorithm;
     private JRadioButtonMenuItem algoHoara;
     private JRadioButtonMenuItem algoLomuto;
-    private JRadioButtonMenuItem algoBuble;
+    private JRadioButtonMenuItem algoBubble;
 
     public Menu() {
         initDataMenu();
@@ -74,10 +74,10 @@ public class Menu extends JMenuBar implements ActionListener {
         algoLomuto.addActionListener(this);
         selectAlgorithm.add(algoLomuto);
 
-        algoBuble = new JRadioButtonMenuItem("BubbleSort");
-        algoBuble.setSelected(false);
-        algoBuble.addActionListener(this);
-        selectAlgorithm.add(algoBuble);
+        algoBubble = new JRadioButtonMenuItem("BubbleSort");
+        algoBubble.setSelected(false);
+        algoBubble.addActionListener(this);
+        selectAlgorithm.add(algoBubble);
 
         algorithmMenu.add(selectAlgorithm);
         this.add(algorithmMenu);
@@ -134,11 +134,11 @@ public class Menu extends JMenuBar implements ActionListener {
             } else {
                 algoLomuto.setSelected(true);
             }
-        } else if (e.getSource() == algoBuble) {
-            if (algoBuble.isSelected()) {
+        } else if (e.getSource() == algoBubble) {
+            if (algoBubble.isSelected()) {
                 setAlgo(3);
             } else {
-                algoBuble.setSelected(true);
+                algoBubble.setSelected(true);
             }
         } else if (e.getSource() == resetData) {
             setData(1);
@@ -176,15 +176,15 @@ public class Menu extends JMenuBar implements ActionListener {
             case 1:
                 parent.setSort(new QuickSortHoara(parent.array));
                 algoLomuto.setSelected(false);
-                algoBuble.setSelected(false);
+                algoBubble.setSelected(false);
                 break;
             case 2:
                 parent.setSort(new QuickSortLomuto(parent.array));
                 algoHoara.setSelected(false);
-                algoBuble.setSelected(false);
+                algoBubble.setSelected(false);
                 break;
             case 3:
-                parent.setSort(new BubleSort(parent.array));
+                parent.setSort(new BubbleSort(parent.array));
                 algoHoara.setSelected(false);
                 algoLomuto.setSelected(false);
                 break;
