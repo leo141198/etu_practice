@@ -1,6 +1,6 @@
 package Algorithm.Sort;
 
-import Algorithm.Structure.Pair;
+import Algorithm.Structure.SortStep;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -9,8 +9,8 @@ import java.util.NoSuchElementException;
 
 public abstract class Sort {
     public ArrayList<Integer> array;
-    protected LinkedList<Pair> steps = new LinkedList<Pair>();
-    protected ListIterator<Pair> current = null;
+    protected LinkedList<SortStep> steps = new LinkedList<SortStep>();
+    protected ListIterator<SortStep> current = null;
 
     public Sort(ArrayList<Integer> array) {
         this.array = new ArrayList<Integer>(array);
@@ -20,22 +20,20 @@ public abstract class Sort {
         int temp = array.get(i);
         array.set(i, array.get(j));
         array.set(j, temp);
-        steps.add(Pair.of(j, i));
     }
 
-    public Pair nextStep() {
+    public SortStep nextStep() {
         try {
-            Pair pair = current.next();
-            return new Pair(pair);
+            return new SortStep(current.next());
         } catch (NoSuchElementException exp) {
             return null;
         }
 
     }
 
-    public Pair prevStep() {
+    public SortStep prevStep() {
         try {
-            return new Pair(current.previous());
+            return new SortStep(current.previous());
         } catch (NoSuchElementException exp) {
             return null;
         }
