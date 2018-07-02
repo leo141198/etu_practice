@@ -1,13 +1,18 @@
 package Graphics;
 
+import Algorithm.Sort.QuickSortHoara;
+import Algorithm.Sort.Sort;
+
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Form extends JFrame implements ActionListener {
+public class Form extends JFrame implements ActionListener, ChangeListener {
     protected JPanel formView;
     protected JButton button_pause;
     protected JPanel map;
@@ -17,8 +22,12 @@ public class Form extends JFrame implements ActionListener {
     private JButton button_next_step;
     private JButton button_next_auto;
     private JButton button_prev_auto;
+    private JLabel label_delay;
     private Menu menuBar;
-    private Map m;
+
+    protected Map m;
+    protected Sort sort;
+    protected ArrayList<Integer> array;
 
     public Form() {
         setContentPane(formView);
@@ -35,18 +44,22 @@ public class Form extends JFrame implements ActionListener {
 
         button_next_auto.addActionListener(this);
         button_prev_auto.addActionListener(this);
+
+        slider_delay.addChangeListener(this);
+
     }
 
     /**
      * Инициализация кастомных элементов интерфейса
      */
     private void createUIComponents() {
-        ArrayList<Integer> list = new ArrayList<Integer>();
+        array = new ArrayList<Integer>();
         Random random = new Random();
-        for (int i = 0; i < 10; i++) {
-            list.add(random.nextInt(50));
+        for (int i = 0; i < 100; i++) {
+            array.add(random.nextInt(1000));
         }
-        m = new Map(list);
+        sort = new QuickSortHoara(array);
+        m = new Map(array, sort);
         map = m;
         menuBar = new Menu();
         this.setJMenuBar(menuBar);
@@ -71,5 +84,26 @@ public class Form extends JFrame implements ActionListener {
             m.setAutoDirection(false);
             m.timerStart();
         }
+    }
+
+    /**
+     * Обработка событий слайдера
+     * @param e событие
+     */
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        if(e.getSource() == slider_delay) {
+            label_delay.setText(slider_delay.getValue() + " мс.");
+            m.setTimerDelay(slider_delay.getValue());
+        }
+    }
+
+    protected void setArray(ArrayList<Integer> array) {
+        this.array = array;
+    }
+
+    protected void setSort(Sort sort) {
+        this.sort = sort;
+        m.init(array, sort);
     }
 }

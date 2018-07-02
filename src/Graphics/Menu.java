@@ -1,5 +1,9 @@
 package Graphics;
 
+import Algorithm.Sort.BubleSort;
+import Algorithm.Sort.QuickSortHoara;
+import Algorithm.Sort.QuickSortLomuto;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,13 +20,15 @@ public class Menu extends JMenuBar implements ActionListener {
     private JRadioButtonMenuItem colorRGB;
     private JRadioButtonMenuItem colorDemo;
 
+    private JMenu selectAlgorithm;
+    private JRadioButtonMenuItem algoHoara;
+    private JRadioButtonMenuItem algoLomuto;
+    private JRadioButtonMenuItem algoBuble;
+
     public Menu() {
         initDataMenu();
-        algorithmMenu = new JMenu("Алгоритм");
         initDisplayMenu();
-        this.add(algorithmMenu);
-
-
+        initAlgorithmMenu();
     }
 
     /**
@@ -38,6 +44,30 @@ public class Menu extends JMenuBar implements ActionListener {
         dataMenu.add(generate);
 
         this.add(dataMenu);
+    }
+
+    private void initAlgorithmMenu() {
+        algorithmMenu = new JMenu("Алгоритм");
+
+        selectAlgorithm = new JMenu("Выбор алгоритма");
+
+        algoHoara = new JRadioButtonMenuItem("qSort (Хоара)");
+        algoHoara.setSelected(true);
+        algoHoara.addActionListener(this);
+        selectAlgorithm.add(algoHoara);
+
+        algoLomuto = new JRadioButtonMenuItem("qSort (Ломуто)");
+        algoLomuto.setSelected(false);
+        algoLomuto.addActionListener(this);
+        selectAlgorithm.add(algoLomuto);
+
+        algoBuble = new JRadioButtonMenuItem("BubbleSort");
+        algoBuble.setSelected(false);
+        algoBuble.addActionListener(this);
+        selectAlgorithm.add(algoBuble);
+
+        algorithmMenu.add(selectAlgorithm);
+        this.add(algorithmMenu);
     }
 
     /**
@@ -67,13 +97,31 @@ public class Menu extends JMenuBar implements ActionListener {
             if (colorRGB.isSelected()) {
                 setRGB(true);
             } else {
-                setRGB(false);
+                colorRGB.setSelected(true);
             }
         } else if (e.getSource() == colorDemo) {
             if (colorDemo.isSelected()) {
                 setRGB(false);
             } else {
-                setRGB(true);
+                colorDemo.setSelected(true);
+            }
+        } else if (e.getSource() == algoHoara) {
+            if (algoHoara.isSelected()) {
+                setAlgo(1);
+            } else {
+                algoHoara.setSelected(true);
+            }
+        } else if (e.getSource() == algoLomuto) {
+            if (algoLomuto.isSelected()) {
+                setAlgo(2);
+            } else {
+                algoLomuto.setSelected(true);
+            }
+        } else if (e.getSource() == algoBuble) {
+            if (algoBuble.isSelected()) {
+                setAlgo(3);
+            } else {
+                algoBuble.setSelected(true);
             }
         }
     }
@@ -88,6 +136,27 @@ public class Menu extends JMenuBar implements ActionListener {
             colorDemo.setSelected(true);
             colorRGB.setSelected(false);
             parent.m.setRGB(false);
+        }
+    }
+
+    private void setAlgo(int algo) {
+        Form parent = (Form) SwingUtilities.getWindowAncestor(this);
+        switch (algo) {
+            case 1:
+                parent.setSort(new QuickSortHoara(parent.array));
+                algoLomuto.setSelected(false);
+                algoBuble.setSelected(false);
+                break;
+            case 2:
+                parent.setSort(new QuickSortLomuto(parent.array));
+                algoHoara.setSelected(false);
+                algoBuble.setSelected(false);
+                break;
+            case 3:
+                parent.setSort(new BubleSort(parent.array));
+                algoHoara.setSelected(false);
+                algoLomuto.setSelected(false);
+                break;
         }
     }
 }

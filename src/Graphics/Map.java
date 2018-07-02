@@ -1,6 +1,6 @@
 package Graphics;
 
-import Algorithm.Sort.QuickSort;
+import Algorithm.Sort.QuickSortHoara;
 import Algorithm.Structure.SortStep;
 import Algorithm.Sort.Sort;
 
@@ -12,27 +12,37 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Map extends JPanel implements ActionListener {
-    private ArrayList<SortElem> elems = new ArrayList<SortElem>();
+    private ArrayList<SortElem> elems;
     private Integer max_value;
     private Sort sort;
     private Boolean rgb = false;
     private Timer timer;
+    private Integer delay = 100;
     private Boolean auto_direction = true;
     private SortStep current_step;
 
-    public Map(ArrayList<Integer> array) {
+    public Map(ArrayList<Integer> array, Sort sort) {
+        init(array, sort);
+    }
+
+    protected void init(ArrayList<Integer> array, Sort sort) {
+        if(timer != null) {
+            timer.stop();
+        }
         this.max_value = Collections.max(array);
+        elems = new ArrayList<SortElem>();
         for (Integer num : array) {
             this.elems.add(new SortElem(num, 0, 0, 0, 0));
         }
-
-        this.sort = new QuickSort(array);
-        sort.sort();
-
-        setDemoColors();
+        this.sort = sort;
+        this.sort.sort();
+        if (rgb) {
+            setRGBColors();
+        } else {
+            setDemoColors();
+        }
         repaint();
-        timer = new Timer(2, this);
-        timer.start();
+        timer = new Timer(delay, this);
     }
 
     /**
@@ -78,7 +88,8 @@ public class Map extends JPanel implements ActionListener {
      * @param delay задержка
      */
     protected void setTimerDelay(int delay) {
-        timer.setDelay(delay);
+        this.delay = delay;
+        timer.setDelay(this.delay);
     }
 
     /**
@@ -149,7 +160,7 @@ public class Map extends JPanel implements ActionListener {
             current_step = sort.prevStep();
         }
         if (current_step != null) {
-            if(current_step.getFinalPos()) {
+            if (current_step.getFinalPos()) {
                 elems.get(current_step.getFirst()).setFinalPos(true);
             }
             if (!this.rgb) {
@@ -248,7 +259,7 @@ public class Map extends JPanel implements ActionListener {
      */
     private void setDemoColors() {
         for (SortElem elem : elems) {
-            if(elem.getFinalPos()) {
+            if (elem.getFinalPos()) {
                 elem.setColor(Color.green);
             } else {
                 elem.setColor(new Color(190, 190, 190));
