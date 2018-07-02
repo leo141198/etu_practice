@@ -9,7 +9,8 @@ public class SortElem extends Component {
     private float width;
     private float height;
     private Integer value;
-    public Color color;
+    private Color color;
+    private Boolean final_pos = false;
 
     public SortElem(Integer value, float x, float y, float width, float height) {
         this.value = value;
@@ -18,6 +19,15 @@ public class SortElem extends Component {
 
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    public void setFinalPos(boolean pos) {
+        this.final_pos = pos;
+    }
+
+
+    public boolean getFinalPos() {
+        return final_pos;
     }
 
     public Integer getValue() {

@@ -25,6 +25,9 @@ public class Menu extends JMenuBar implements ActionListener {
 
     }
 
+    /**
+     * Инициализация меню управления данными
+     */
     private void initDataMenu() {
         dataMenu = new JMenu("Данные");
 
@@ -37,6 +40,9 @@ public class Menu extends JMenuBar implements ActionListener {
         this.add(dataMenu);
     }
 
+    /**
+     * Инициализация меню управления отображением
+     */
     private void initDisplayMenu() {
         displayMenu = new JMenu("Отображение");
         selectColor = new JMenu("Выбор цветов");
@@ -57,14 +63,14 @@ public class Menu extends JMenuBar implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == colorRGB) {
-            if(colorRGB.isSelected()) {
+        if (e.getSource() == colorRGB) {
+            if (colorRGB.isSelected()) {
                 setRGB(true);
             } else {
                 setRGB(false);
             }
-        } else if(e.getSource() == colorDemo) {
-            if(colorDemo.isSelected()) {
+        } else if (e.getSource() == colorDemo) {
+            if (colorDemo.isSelected()) {
                 setRGB(false);
             } else {
                 setRGB(true);
@@ -73,15 +79,15 @@ public class Menu extends JMenuBar implements ActionListener {
     }
 
     private void setRGB(boolean rgb) {
-        Form parent = (Form)SwingUtilities.getWindowAncestor(this);
-        if(rgb) {
+        Form parent = (Form) SwingUtilities.getWindowAncestor(this);
+        if (rgb) {
             colorDemo.setSelected(false);
             colorRGB.setSelected(true);
             parent.m.setRGB(true);
         } else {
-                colorDemo.setSelected(true);
-                colorRGB.setSelected(false);
-                parent.m.setRGB(false);
+            colorDemo.setSelected(true);
+            colorRGB.setSelected(false);
+            parent.m.setRGB(false);
         }
     }
 }

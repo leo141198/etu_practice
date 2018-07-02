@@ -1,8 +1,8 @@
 package Graphics;
 
+import Algorithm.Sort.QuickSort;
 import Algorithm.Structure.SortStep;
 import Algorithm.Sort.Sort;
-import Algorithm.Sort.QuickSort;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,7 +31,8 @@ public class Map extends JPanel implements ActionListener {
 
         setDemoColors();
         repaint();
-        timer = new Timer(100, this);
+        timer = new Timer(2, this);
+        timer.start();
     }
 
     /**
@@ -148,6 +149,9 @@ public class Map extends JPanel implements ActionListener {
             current_step = sort.prevStep();
         }
         if (current_step != null) {
+            if(current_step.getFinalPos()) {
+                elems.get(current_step.getFirst()).setFinalPos(true);
+            }
             if (!this.rgb) {
                 selectStep(current_step);
             }
@@ -179,17 +183,21 @@ public class Map extends JPanel implements ActionListener {
      * @param step шаг алгоритма
      */
     private void selectStep(SortStep step) {
-        elems.get(step.getPivot()).setColor(Color.yellow);
-        if (step.getFirstChange()) {
-            elems.get(step.getFirst()).setColor(Color.blue);
+        if (step.getFinalPos()) {
+            elems.get(step.getFirst()).setColor(Color.green);
         } else {
-            elems.get(step.getFirst()).setColor(Color.orange);
-        }
+            elems.get(step.getPivot()).setColor(Color.yellow);
+            if (step.getFirstChange()) {
+                elems.get(step.getFirst()).setColor(Color.blue);
+            } else {
+                elems.get(step.getFirst()).setColor(Color.orange);
+            }
 
-        if (step.getSecondChange()) {
-            elems.get(step.getSecond()).setColor(Color.blue);
-        } else {
-            elems.get(step.getSecond()).setColor(Color.orange);
+            if (step.getSecondChange()) {
+                elems.get(step.getSecond()).setColor(Color.blue);
+            } else {
+                elems.get(step.getSecond()).setColor(Color.orange);
+            }
         }
     }
 
@@ -199,9 +207,11 @@ public class Map extends JPanel implements ActionListener {
      * @param step шаг алгоритма
      */
     private void unselectStep(SortStep step) {
-        elems.get(step.getFirst()).setColor(new Color(190, 190, 190));
-        elems.get(step.getSecond()).setColor(new Color(190, 190, 190));
-        elems.get(step.getPivot()).setColor(new Color(190, 190, 190));
+        if (!step.getFinalPos()) {
+            elems.get(step.getFirst()).setColor(new Color(190, 190, 190));
+            elems.get(step.getSecond()).setColor(new Color(190, 190, 190));
+            elems.get(step.getPivot()).setColor(new Color(190, 190, 190));
+        }
     }
 
     /* ОТРИСОВКА ЦВЕТОВ */
@@ -238,7 +248,11 @@ public class Map extends JPanel implements ActionListener {
      */
     private void setDemoColors() {
         for (SortElem elem : elems) {
-            elem.setColor(new Color(190, 190, 190));
+            if(elem.getFinalPos()) {
+                elem.setColor(Color.green);
+            } else {
+                elem.setColor(new Color(190, 190, 190));
+            }
         }
     }
 }
