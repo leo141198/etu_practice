@@ -1,6 +1,7 @@
 package Graphics;
 
-import Algorithm.Sort.QuickSortHoara;
+import Algorithm.Array.Generator;
+import Algorithm.Sort.*;
 import Algorithm.Sort.Sort;
 
 import javax.swing.*;
@@ -10,7 +11,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Form extends JFrame implements ActionListener, ChangeListener {
     protected JPanel formView;
@@ -53,11 +53,7 @@ public class Form extends JFrame implements ActionListener, ChangeListener {
      * Инициализация кастомных элементов интерфейса
      */
     private void createUIComponents() {
-        array = new ArrayList<Integer>();
-        Random random = new Random();
-        for (int i = 0; i < 100; i++) {
-            array.add(random.nextInt(1000));
-        }
+        array = Generator.randomArray(0, 1000, 100);
         sort = new QuickSortHoara(array);
         m = new Map(array, sort);
         map = m;
@@ -100,6 +96,13 @@ public class Form extends JFrame implements ActionListener, ChangeListener {
 
     protected void setArray(ArrayList<Integer> array) {
         this.array = array;
+        Object sort = null;
+        try {
+            sort =Class.forName(this.sort.getClass().getName()).getConstructor(ArrayList.class).newInstance(this.array);
+        } catch (Exception e){
+
+        }
+        setSort((Sort) sort);
     }
 
     protected void setSort(Sort sort) {

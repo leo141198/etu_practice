@@ -1,5 +1,7 @@
 package Graphics;
 
+import Algorithm.Array.FileRead;
+import Algorithm.Array.Generator;
 import Algorithm.Sort.BubleSort;
 import Algorithm.Sort.QuickSortHoara;
 import Algorithm.Sort.QuickSortLomuto;
@@ -7,6 +9,7 @@ import Algorithm.Sort.QuickSortLomuto;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class Menu extends JMenuBar implements ActionListener {
     private JMenu dataMenu;
@@ -15,6 +18,7 @@ public class Menu extends JMenuBar implements ActionListener {
 
     private JMenuItem openFile;
     private JMenuItem generate;
+    private JMenuItem resetData;
 
     private JMenu selectColor;
     private JRadioButtonMenuItem colorRGB;
@@ -37,11 +41,17 @@ public class Menu extends JMenuBar implements ActionListener {
     private void initDataMenu() {
         dataMenu = new JMenu("Данные");
 
-        openFile = new JMenuItem("Прочитать из файла");
-        dataMenu.add(openFile);
+        resetData = new JMenuItem("Вернуть в исходное состояние");
+        resetData.addActionListener(this);
+        dataMenu.add(resetData);
 
         generate = new JMenuItem("Сгенерировать");
+        generate.addActionListener(this);
         dataMenu.add(generate);
+
+        openFile = new JMenuItem("Прочитать из файла");
+        openFile.addActionListener(this);
+        dataMenu.add(openFile);
 
         this.add(dataMenu);
     }
@@ -123,6 +133,12 @@ public class Menu extends JMenuBar implements ActionListener {
             } else {
                 algoBuble.setSelected(true);
             }
+        } else if (e.getSource() == resetData) {
+            setData(1);
+        } else if (e.getSource() == generate) {
+            setData(2);
+        } else if (e.getSource() == openFile) {
+            setData(3);
         }
     }
 
@@ -156,6 +172,26 @@ public class Menu extends JMenuBar implements ActionListener {
                 parent.setSort(new BubleSort(parent.array));
                 algoHoara.setSelected(false);
                 algoLomuto.setSelected(false);
+                break;
+        }
+    }
+
+    private void setData(int data) {
+        Form parent = (Form) SwingUtilities.getWindowAncestor(this);
+        switch (data) {
+            case 1:
+                parent.setArray(parent.array);
+                break;
+            case 2:
+                String num = JOptionPane.showInputDialog("Введите число элементов в генерируемом массиве");
+                String max = JOptionPane.showInputDialog("Введите верхнюю границу значений элементов");
+                parent.setArray(Generator.randomArray(0, Integer.parseInt(max), Integer.parseInt(num)));
+                break;
+            case 3:
+                ArrayList<Integer> array = FileRead.readFile();
+                if (array != null) {
+                    parent.setArray(array);
+                }
                 break;
         }
     }
