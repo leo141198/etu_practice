@@ -1,23 +1,17 @@
 package Algorithm.Structure;
 
-public class SortStep {
-    private Integer first;
-    private Integer second;
-    private Integer pivot;
-    private boolean first_change;
-    private boolean second_change;
-    private boolean swap;
-    private boolean final_pos;
+import Algorithm.Sort.Sort;
 
-    public SortStep(Integer first, Integer second, Integer pivot, boolean first_change, boolean second_change, boolean swap, boolean final_pos) {
-        this.first = first;
-        this.second = second;
-        this.first_change = first_change;
-        this.second_change = second_change;
-        this.pivot = pivot;
-        this.swap = swap;
-        this.final_pos = final_pos;
-    }
+public class SortStep {
+    private Integer first = null;
+    private Integer second = null;
+    private Integer pivot = null;
+    private boolean first_change = false;
+    private boolean second_change = false;
+    private boolean swap = false;
+    private boolean final_pos = false;
+
+    public SortStep() {}
 
     public SortStep(SortStep other) {
         this.first = other.first;
@@ -55,5 +49,40 @@ public class SortStep {
 
     public Boolean getFinalPos() {
         return final_pos;
+    }
+
+    public SortStep setFirst(Integer first) {
+        this.first = first;
+        return this;
+    }
+
+    public SortStep setSecond(Integer second) {
+        this.second = second;
+        return this;
+    }
+
+    public SortStep setFirstChanged() {
+        this.first_change = true;
+        return this;
+    }
+
+    public SortStep setSecondChanged() {
+        this.second_change = true;
+        return this;
+    }
+
+    public SortStep setPivot(Integer pivot) {
+        this.pivot = pivot;
+        return this;
+    }
+
+    public SortStep setSwap() {
+        this.swap = true;
+        return this;
+    }
+
+    public SortStep setFinalPos() {
+        this.final_pos = true;
+        return this;
     }
 }

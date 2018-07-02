@@ -26,7 +26,7 @@ public class Map extends JPanel implements ActionListener {
     }
 
     protected void init(ArrayList<Integer> array, Sort sort) {
-        if(timer != null) {
+        if (timer != null) {
             timer.stop();
         }
         this.max_value = Collections.max(array);
@@ -197,17 +197,22 @@ public class Map extends JPanel implements ActionListener {
         if (step.getFinalPos()) {
             elems.get(step.getFirst()).setColor(Color.green);
         } else {
-            elems.get(step.getPivot()).setColor(Color.yellow);
-            if (step.getFirstChange()) {
-                elems.get(step.getFirst()).setColor(Color.blue);
-            } else {
-                elems.get(step.getFirst()).setColor(Color.orange);
+            if (step.getPivot() != null) {
+                elems.get(step.getPivot()).setColor(Color.yellow);
             }
-
-            if (step.getSecondChange()) {
-                elems.get(step.getSecond()).setColor(Color.blue);
-            } else {
-                elems.get(step.getSecond()).setColor(Color.orange);
+            if (step.getFirst() != null) {
+                if (step.getFirstChange()) {
+                    elems.get(step.getFirst()).setColor(Color.blue);
+                } else {
+                    elems.get(step.getFirst()).setColor(Color.orange);
+                }
+            }
+            if (step.getSecond() != null) {
+                if (step.getSecondChange()) {
+                    elems.get(step.getSecond()).setColor(Color.blue);
+                } else {
+                    elems.get(step.getSecond()).setColor(Color.orange);
+                }
             }
         }
     }
@@ -219,9 +224,15 @@ public class Map extends JPanel implements ActionListener {
      */
     private void unselectStep(SortStep step) {
         if (!step.getFinalPos()) {
-            elems.get(step.getFirst()).setColor(new Color(190, 190, 190));
-            elems.get(step.getSecond()).setColor(new Color(190, 190, 190));
-            elems.get(step.getPivot()).setColor(new Color(190, 190, 190));
+            if (step.getFirst() != null) {
+                elems.get(step.getFirst()).setColor(new Color(190, 190, 190));
+            }
+            if (step.getSecond() != null) {
+                elems.get(step.getSecond()).setColor(new Color(190, 190, 190));
+            }
+            if (step.getPivot() != null) {
+                elems.get(step.getPivot()).setColor(new Color(190, 190, 190));
+            }
         }
     }
 

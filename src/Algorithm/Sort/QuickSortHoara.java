@@ -17,38 +17,38 @@ public class QuickSortHoara extends QuickSort {
             int i = from, j = to;
             while (i <= j) {
                 while (i <= j && array.get(i) < pivot) {
-                    steps.add(new SortStep(i, j, pivot_loc, false, false, false, false));
+                    steps.add(new SortStep().setFirst(i).setSecond(j).setPivot(pivot_loc));
                     i++;
                 }
                 while (i <= j && array.get(j) > pivot) {
-                    steps.add(new SortStep(i, j, pivot_loc, true, false, false, false));
+                    steps.add(new SortStep().setFirst(i).setFirstChanged().setSecond(j).setPivot(pivot_loc));
                     j--;
                 }
                 if (i <= j) {
                     swap(i, j);
-                    steps.add(new SortStep(i, j, pivot_loc, true, true, false, false));
+                    steps.add(new SortStep().setFirst(i).setFirstChanged().setSecond(j).setSecondChanged().setPivot(pivot_loc));
                     if (i == pivot_loc) {
                         pivot_loc = j;
                     } else if (j == pivot_loc) {
                         pivot_loc = i;
                     }
-                    steps.add(new SortStep(i, j, pivot_loc, true, true, true, false));
+                    steps.add(new SortStep().setFirst(i).setFirstChanged().setSecond(j).setSecondChanged().setPivot(pivot_loc).setSwap());
                     i++;
                     j--;
                 }
             }
             if (i - j == 2) {
-                steps.add(new SortStep(i - 1, 0, 0, false, false, false, true));
+                steps.add(new SortStep().setFirst(i - 1).setFinalPos());
             }
             if (from < j) {
                 sortArray(from, j);
             } else if (j >= 0) {
-                steps.add(new SortStep(j, 0, 0, false, false, false, true));
+                steps.add(new SortStep().setFirst(j).setFinalPos());
             }
             if (to > i) {
                 sortArray(i, to);
             } else {
-                steps.add(new SortStep(i, 0, 0, false, false, false, true));
+                steps.add(new SortStep().setFirst(i).setFinalPos());
             }
         }
     }
